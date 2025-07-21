@@ -1,0 +1,54 @@
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+}
+
+h1 {
+    color: #0056b3;
+    margin-bottom: 20px;
+}
+
+p#status {
+    font-size: 1.1em;
+    margin-bottom: 20px;
+}
+
+.action-btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    margin: 10px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: calc(50% - 20px); /* Butonlarýn yan yana gelmesi için */
+    box-sizing: border-box; /* Padding dahil geniþlik hesaplamasý */
+}
+
+.action-btn:hover {
+    background-color: #0056b3;
+}
+
+.message {
+    margin-top: 20px;
+    font-size: 1em;
+    color: #666;
+}
