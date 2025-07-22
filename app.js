@@ -116,8 +116,8 @@ async function sendAttendanceRecord(action) {
 
     messageElem.textContent = 'Yoklama kaydı gönderiliyor...';
     
-    // Adım 3'te oluşturacağımız Google Apps Script Web Uygulaması URL'si
-    const appsScriptUrl = 'YOUR_APPS_SCRIPT_WEB_APP_URL'; // https://script.google.com/macros/s/AKfycbzZMuB6QfPRVJZnTrDr0fXk5zaodAfQ96BsilqR29o_jK2yQmXhwPkgoVybvlppGAGB/exec
+    // Adım 3'te oluşturduğumuz Google Apps Script Web Uygulaması URL'si
+    const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbzZMuB6QfPRVJZnTrDr0fXk5zaodAfQ96BsilqR29o_jK2yQmXhwPkgoVybvlppGAGB/exec'; 
 
     try {
         const response = await fetch(appsScriptUrl, {
