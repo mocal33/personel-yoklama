@@ -1,6 +1,6 @@
 // Adım 6'da belirleyeceğiniz kurumunuzun konum bilgileri
-const INSTITUTION_LATITUDE = 36.609107; // Örnek: Ankara Kızılay Meydanı enlemi
-const INSTITUTION_LONGITUDE = 34.303919; // Örnek: Ankara Kızılay Meydanı boylamı
+const INSTITUTION_LATITUDE = 36.612145; // Örnek: Ankara Kızılay Meydanı enlemi
+const INSTITUTION_LONGITUDE = 34.304637; // Örnek: Ankara Kızılay Meydanı boylamı
 const LOCATION_TOLERANCE_METERS = 100; // Kurumdan maksimum uzaklık (metre)
 
 const statusElem = document.getElementById('status');
