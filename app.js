@@ -1,7 +1,7 @@
 // Adım 6'da belirleyeceğiniz kurumunuzun konum bilgileri
 const INSTITUTION_LATITUDE = 36.612145; // Örnek: Ankara Kızılay Meydanı enlemi
 const INSTITUTION_LONGITUDE = 34.304637; // Örnek: Ankara Kızılay Meydanı boylamı
-const LOCATION_TOLERANCE_METERS = 100; // Kurumdan maksimum uzaklık (metre)
+const LOCATION_TOLERANCE_METERS = 50; // Kurumdan maksimum uzaklık (metre) - 100'den 50'ye güncellendi
 
 const statusElem = document.getElementById('status');
 const checkInBtn = document.getElementById('checkInBtn');
@@ -17,7 +17,7 @@ let userLon = null; // Kullanıcının boylamı
 window.handleCredentialResponse = (response) => {
     // Google'dan gelen kimlik belirteci (token)
     const idToken = response.credential;
-    const decodedToken = parseJwt(idToken); // JWT token'ı çözümle
+    const decodedToken = parseJwt(idToken); 
     
     userEmail = decodedToken.email;
     statusElem.textContent = `Hoş geldiniz, ${decodedToken.name || decodedToken.email}! Konum doğrulanıyor...`;
@@ -53,9 +53,9 @@ function getGeolocation() {
                 messageElem.textContent = 'Yoklama yapmak için konum izni gereklidir.';
             },
             {
-                enableHighAccuracy: true, // Daha yüksek doğruluk iste
-                timeout: 10000,           // 10 saniye içinde yanıt bekle
-                maximumAge: 0             // Önbellekten değil, yeni konum al
+                enableHighAccuracy: true, 
+                timeout: 10000,           
+                maximumAge: 0             
             }
         );
     } else {
@@ -77,7 +77,7 @@ function checkLocationAndEnableButtons() {
         statusElem.textContent = `Konum doğrulandı. ${distance.toFixed(2)} metre uzaktasınız.`;
         checkInBtn.style.display = 'inline-block';
         checkOutBtn.style.display = 'inline-block';
-        googleSignInDiv.style.display = 'none'; // Konum ve kimlik tamam ise Google düğmesini gizle
+        googleSignInDiv.style.display = 'none'; 
     } else {
         statusElem.textContent = `Konumunuz kurum dışında (${distance.toFixed(2)} metre).`;
         messageElem.textContent = 'Yoklama yapmak için kurum içinde olmalısınız.';
@@ -88,8 +88,8 @@ function checkLocationAndEnableButtons() {
 
 // Haversine formülü ile iki koordinat arasındaki mesafeyi hesaplama (metre cinsinden)
 function getDistance(lat1, lon1, lat2, lon2) {
-    const R = 6371e3; // metres
-    const φ1 = lat1 * Math.PI / 180; // φ, λ in radians
+    const R = 6371e3; 
+    const φ1 = lat1 * Math.PI / 180; 
     const φ2 = lat2 * Math.PI / 180;
     const Δφ = (lat2 - lat1) * Math.PI / 180;
     const Δλ = (lon2 - lon1) * Math.PI / 180;
@@ -99,7 +99,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
               Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-    const d = R * c; // in metres
+    const d = R * c; 
     return d;
 }
 
@@ -116,13 +116,13 @@ async function sendAttendanceRecord(action) {
 
     messageElem.textContent = 'Yoklama kaydı gönderiliyor...';
     
-    // Adım 3'te oluşturduğumuz Google Apps Script Web Uygulaması URL'si
+    // Apps Script Web Uygulaması URL'si (en son güncel hali)
     const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbxnaob-DFPpSydpFjWZ64543RgraHM3D8mBjBXGIw1vRtZt8psVI0GlsXa7p4Vosyip/exec'; 
 
     try {
         const response = await fetch(appsScriptUrl, {
             method: 'POST',
-            mode: 'no-cors', // CORS hatasını önlemek için (Apps Script tarafında yapılandırma gerekecek)
+            mode: 'no-cors', 
             cache: 'no-cache',
             headers: {
                 'Content-Type': 'application/json'
@@ -136,12 +136,10 @@ async function sendAttendanceRecord(action) {
             })
         });
 
-        // no-cors modunda gerçek yanıtı okuyamayız, ancak isteğin gönderildiğinden eminiz
-        // Apps Script tarafı 200 OK döndürecektir.
         messageElem.textContent = `${action} kaydınız başarıyla alındı! Teşekkür ederiz.`;
         setTimeout(() => {
-            messageElem.textContent = ''; // Mesajı bir süre sonra temizle
-        }, 5000); // 5 saniye sonra temizle
+            messageElem.textContent = ''; 
+        }, 5000); 
 
     } catch (error) {
         console.error('Yoklama kaydı gönderme hatası:', error);
@@ -153,17 +151,7 @@ async function sendAttendanceRecord(action) {
 checkInBtn.addEventListener('click', () => sendAttendanceRecord('Giris'));
 checkOutBtn.addEventListener('click', () => sendAttendanceRecord('Cikis'));
 
-// Sayfa yüklendiğinde Google oturum açma arayüzünü başlat
-// ve sonrasında konum bilgisini almaya çalış.
-// Google Tek Tıkla Oturum Açma, sayfa yüklendiğinde otomatik olarak kendi div'ini render eder.
-// Bizim app.js'imiz, handleCredentialResponse ile tetiklenecek.
 document.addEventListener('DOMContentLoaded', () => {
-    // Kullanıcıya ilk mesajı göster
     statusElem.textContent = 'Lütfen konum izni verin ve Google ile oturum açın.';
-    // Google oturum açma div'ini göster (kullanıcı etkileşimi için)
     googleSignInDiv.style.display = 'block';
 });
-
-// Konum alma işlemini, Google oturumu açıldıktan sonra handleCredentialResponse içinde çağırıyoruz.
-// Eğer kullanıcı Google ile oturum açmadan konum istersek, bunu doğrudan DOMContentLoaded içinde çağırabilirdik.
-// Ancak senaryomuzda önce Google kimliği sonra konum geliyor.
