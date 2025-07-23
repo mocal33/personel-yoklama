@@ -50,6 +50,7 @@ function getGeolocation() {
                 statusElem.textContent = 'Konum alınamadı. Lütfen konum izni verdiğinizden emin olun.';
                 console.error('Konum hatası:', error);
                 messageElem.textContent = 'Yoklama yapmak için konum izni gereklidir.';
+                messageElem.classList.add('error'); // Konum hatasında da kırmızı
             },
             {
                 enableHighAccuracy: true, 
@@ -60,11 +61,13 @@ function getGeolocation() {
     } else {
         statusElem.textContent = 'Tarayıcınız konum servislerini desteklemiyor.';
         messageElem.textContent = 'Yoklama yapmak için konum servisleri destekleyen bir cihaz kullanın.';
+        messageElem.classList.add('error'); // Tarayıcı desteği yoksa da kırmızı
     }
 }
 
 // --- Konum Doğrulama ve Butonları Etkinleştirme ---
 function checkLocationAndEnableButtons() {
+    messageElem.classList.remove('error'); // Her kontrolde hata sınıfını temizle
     if (userLat === null || userLon === null) {
         statusElem.textContent = 'Konum bilgisi eksik.';
         return;
@@ -79,6 +82,7 @@ function checkLocationAndEnableButtons() {
     } else {
         statusElem.textContent = `Konumunuz kurum dışında (${distance.toFixed(2)} metre).`;
         messageElem.textContent = 'Yoklama yapmak için kurum içinde olmalısınız.';
+        messageElem.classList.add('error'); // Hata sınıfını ekledik, kırmızı olacak
         checkInBtn.style.display = 'none'; // Butonu gizle
     }
 }
@@ -102,17 +106,22 @@ function getDistance(lat1, lon1, lat2, lon2) {
 
 // --- Yoklama Kaydını Gönderme ---
 async function sendAttendanceRecord(action) {
+    messageElem.classList.remove('error'); // Her gönderimde hata sınıfını temizle
     if (!userEmail) {
         messageElem.textContent = 'Lütfen önce Google hesabınızla oturum açın.';
+        messageElem.classList.add('error');
         return;
     }
     if (userLat === null || userLon === null) {
         messageElem.textContent = 'Konum bilgisi alınamadı.';
+        messageElem.classList.add('error');
         return;
     }
 
     messageElem.textContent = 'Yoklama kaydı gönderiliyor...';
-    
+    messageElem.style.color = '#333'; // Gönderim sırasında rengi normal yap
+    messageElem.style.fontWeight = 'normal';
+
     // Apps Script Web Uygulaması URL'si (en son güncel hali)
     const appsScriptUrl = 'https://script.google.com/macros/s/AKfycbxnaob-DFPpSydpFjWZ64543RgraHM3D8mBjBXGIw1vRtZt8psVI0GlsXa7p4Vosyip/exec'; 
 
@@ -148,7 +157,7 @@ async function sendAttendanceRecord(action) {
     } catch (error) {
         console.error('Yoklama kaydı gönderme hatası:', error);
         messageElem.textContent = `Yoklama kaydı gönderilirken bir hata oluştu: ${error.message}`;
-        messageElem.style.color = '#dc3545'; // Hata mesajının rengi
+        messageElem.classList.add('error'); // Hata durumunda kırmızı
         messageElem.style.fontWeight = 'bold'; // Hata mesajının kalınlığı
         // Hata durumunda butonu gizlemiyoruz, kullanıcı tekrar deneyebilir.
     }
