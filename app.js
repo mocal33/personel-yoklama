@@ -134,14 +134,22 @@ async function sendAttendanceRecord(action) {
         });
 
         messageElem.textContent = `${action} kaydınız başarıyla alındı! Teşekkür ederiz.`;
+        messageElem.style.color = '#28a745'; // Başarı mesajının rengi
+        messageElem.style.fontWeight = 'bold'; // Başarı mesajının kalınlığı
         checkInBtn.style.display = 'none'; // Başarılı kayıt sonrası butonu gizle
+
         setTimeout(() => {
-            messageElem.textContent = ''; 
-        }, 5000); 
+            messageElem.textContent = 'Sayfayı kapatabilirsiniz.'; // 10 saniye sonra görünecek mesaj
+            messageElem.style.color = '#0056b3'; // Mesaj rengini değiştirebiliriz
+            messageElem.style.fontSize = '1.2em'; // İsterseniz puntosunu ayarlayabilirsiniz
+            messageElem.style.fontWeight = 'normal'; // Kalınlığı kaldırabilirsiniz
+        }, 10000); // 'Teşekkür ederiz' mesajı 10 saniye boyunca kalacak
 
     } catch (error) {
         console.error('Yoklama kaydı gönderme hatası:', error);
         messageElem.textContent = `Yoklama kaydı gönderilirken bir hata oluştu: ${error.message}`;
+        messageElem.style.color = '#dc3545'; // Hata mesajının rengi
+        messageElem.style.fontWeight = 'bold'; // Hata mesajının kalınlığı
         // Hata durumunda butonu gizlemiyoruz, kullanıcı tekrar deneyebilir.
     }
 }
