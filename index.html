@@ -3,34 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kurum Personel Yoklama</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Personel Yoklama</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        h1 {
+            color: #0056b3;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin: 10px;
+            transition: background-color 0.3s ease;
+            width: auto; /* Metne göre genişlesin */
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        /* Durum ve Mesaj Punktosu Ayarları */
+        #status {
+            font-size: 1.1em; /* Durum mesajı için punto */
+            color: #555;
+            margin-bottom: 15px;
+        }
+        #message {
+            font-size: 1.3em; /* Puntoyu biraz daha büyüttük */
+            color: #28a745; /* Başarılı mesajlar için yeşil */
+            margin-top: 15px;
+            font-weight: bold; /* Kalın yazı tipi */
+        }
+        /* Hata mesajları için kırmızı */
+        #message.error {
+            color: #dc3545; 
+        }
+
+        .g_id_signin {
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <h1>Kurum Personel Yoklama</h1>
-        <p id="status">Lütfen konum ve Google hesabýnýzla oturum açma izni verin...</p>
-
+        <h1>Personel Yoklama Sistemi</h1>
+        <div id="status">Lütfen konum izni verin ve Google ile oturum açın.</div>
+        
         <div id="g_id_onload"
-             data-client_id="890192328186-1ddencndgb76mfrdn2tjiqbapavrg8hn.apps.googleusercontent.com"
-             data-callback="handleCredentialResponse"
+             data-client_id="GOOGLE_CLIENT_ID_BURAYA" data-callback="handleCredentialResponse"
              data-auto_prompt="false">
         </div>
-        <div class="g_id_signin"
-             data-type="standard"
-             data-size="large"
-             data-theme="outline"
-             data-text="sign_in_with"
-             data-shape="rectangular"
-             data-logo_alignment="left"
-             style="display: none;"> </div>
+        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="sign_in_with" data-shape="rectangular" data-logo_alignment="left"></div>
 
-        <button id="checkInBtn" class="action-btn" data-action="Giris" style="display:none;">Giriþ Kaydet</button>
-        <button id="checkOutBtn" class="action-btn" data-action="Cikis" style="display:none;">Çýkýþ Kaydet</button>
-        <p id="message" class="message"></p>
-    </div>
-
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+        <button id="checkInBtn" style="display:none;">Girişi Kaydet</button>
+        <div id="message"></div> </div>
     <script src="app.js"></script>
 </body>
 </html>
