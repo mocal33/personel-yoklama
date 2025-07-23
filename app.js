@@ -1,11 +1,10 @@
 // Adım 6'da belirleyeceğiniz kurumunuzun konum bilgileri
 const INSTITUTION_LATITUDE = 36.612145; // Örnek: Ankara Kızılay Meydanı enlemi
 const INSTITUTION_LONGITUDE = 34.304637; // Örnek: Ankara Kızılay Meydanı boylamı
-const LOCATION_TOLERANCE_METERS = 50; // Kurumdan maksimum uzaklık (metre) - 100'den 50'ye güncellendi
+const LOCATION_TOLERANCE_METERS = 50; // Kurumdan maksimum uzaklık (metre)
 
 const statusElem = document.getElementById('status');
 const checkInBtn = document.getElementById('checkInBtn');
-const checkOutBtn = document.getElementById('checkOutBtn');
 const messageElem = document.getElementById('message');
 const googleSignInDiv = document.querySelector('.g_id_signin');
 
@@ -75,14 +74,12 @@ function checkLocationAndEnableButtons() {
 
     if (distance <= LOCATION_TOLERANCE_METERS) {
         statusElem.textContent = `Konum doğrulandı. ${distance.toFixed(2)} metre uzaktasınız.`;
-        checkInBtn.style.display = 'inline-block';
-        checkOutBtn.style.display = 'inline-block';
+        checkInBtn.style.display = 'inline-block'; // Butonu görünür yap
         googleSignInDiv.style.display = 'none'; 
     } else {
         statusElem.textContent = `Konumunuz kurum dışında (${distance.toFixed(2)} metre).`;
         messageElem.textContent = 'Yoklama yapmak için kurum içinde olmalısınız.';
-        checkInBtn.style.display = 'none';
-        checkOutBtn.style.display = 'none';
+        checkInBtn.style.display = 'none'; // Butonu gizle
     }
 }
 
@@ -137,6 +134,7 @@ async function sendAttendanceRecord(action) {
         });
 
         messageElem.textContent = `${action} kaydınız başarıyla alındı! Teşekkür ederiz.`;
+        checkInBtn.style.display = 'none'; // Başarılı kayıt sonrası butonu gizle
         setTimeout(() => {
             messageElem.textContent = ''; 
         }, 5000); 
@@ -144,12 +142,12 @@ async function sendAttendanceRecord(action) {
     } catch (error) {
         console.error('Yoklama kaydı gönderme hatası:', error);
         messageElem.textContent = `Yoklama kaydı gönderilirken bir hata oluştu: ${error.message}`;
+        // Hata durumunda butonu gizlemiyoruz, kullanıcı tekrar deneyebilir.
     }
 }
 
 // --- Olay Dinleyicileri ---
 checkInBtn.addEventListener('click', () => sendAttendanceRecord('Giris'));
-checkOutBtn.addEventListener('click', () => sendAttendanceRecord('Cikis'));
 
 document.addEventListener('DOMContentLoaded', () => {
     statusElem.textContent = 'Lütfen konum izni verin ve Google ile oturum açın.';
